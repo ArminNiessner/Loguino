@@ -48,23 +48,90 @@ The eagle files for the PCB are available in this repository and all parts are a
 ## Assembly
 
 1. Clean PCB with alcohol, prepare soldering areas for the ADC on the PCB with soldering fluid and solder the ADC MCP3424 onto the PCB.
+
 1. Solder the Arduino Mini Pro Board on the PCB using pins.
+
 1. Remove LED on Arduino Mini.
+
 1. Solder a strip of 6 female pins next to the Arduino Mini for connection to FTDI.
+
 1. Solder two 4.7K Resistors, a 0.1µF ceramic capacitor and a 10µF ELKO next to the ADC.
+
 1. Upload test script "Loguino_1_ADC_test.ino" (Address = 3 (6B)) and open serial monitor.
+
 1. Serial monitor should show random numbers for all four channels.
+
 1. Solder all screw terminals, resistors, capacitors and pins onto PCB.
+
 1. Repeat MCP test (6.).
+
 1. Prepare SD-Card- and RTC-modules:
+
 * Remove transistor from the SD-card-module, connect lower to pins with a bridge and remove overlapping part of SD-module-PCB under pins using a "Dremel".
+
 * Remove LED and upper resistor-IC from RTC-module.
+
 1. Solder RTC-module to PCB and test by uploading test script "Loguino_2_RTC_test.ino".
+
 1. Solder SD-module to PCB and test by uploading test script "Loguino_3_Card_test.ino"
 
 ## Sensors
 
+### DS18S20 Temperature:
+
+* Black (Brown) = GND (right)
+
+* Red (Green) = VCC (middle)
+
+* Yellow (White) = DATA (left)
+
+### SHT7x Sensirion T/RH Sensor:
+
+* DATA
+
+* SCK
+
+* VCC
+
+* GND
+
+### Dendrometer (linear displacement potentiometer, MMR10_11 R5K, Megatron Elektronik AG & Co, Munich, Germany):
+
+* Green = Ch1+ (left)
+
+* Yellow = Ch1- (middle)
+
+* Red = Ch2+ (right)
+
+* Bridges at Ch1- and Ch2- have to be connected
+
+### Thermocouple (Granier-sap-flow sensor):
+
+* Connect one end to Ch+ and the other end the Ch-
+
+* Set gain of ADC to “3”
+
 ## Libraries
+
+* AVRUtils ([Git](https://github.com/SConaway/AVRUtils)) - measure supply voltage
+
+* SPI ([Arduino](https://www.arduino.cc/en/reference/SPI)) - communication with SD-card module
+
+* SD ([Arduino](https://www.arduino.cc/en/Reference/SD)) - read and write to SD-card
+
+* Wire ([Arduino](https://www.arduino.cc/en/reference/wire)) - communication with I²C devices e.g. the MCP3424
+
+* LowPower ([Git](https://github.com/rocketscream/Low-Power)) - low power library to set Loguino to sleep
+
+* ANiess (available in this repository) - main library for Loguino
+
+* AN_RTClib (available in this repository) - library to interact with RTC
+
+* MCP342x (available in this repository) - library to interact with the ADC
+
+* DallasTemperature ([Git](https://github.com/milesburton/Arduino-Temperature-Control-Library))- library to interact with the DS18S20 temperature sensor
+
+* Sensirion ([Git](https://github.com/spease/Sensirion)) - library to interact with the SHT75 T/RH sensor
 
 ## Troubleshooting
 
