@@ -43,6 +43,8 @@ The eagle files for the PCB are available in this repository and all parts are a
 
 * PCB (eagle files available in this repository or contact armin.niessner@taysira.org)
 
+![PCB](/PCB/Loguino_Mini.png)
+
 ## Assembly
 
 1. Clean PCB with alcohol, prepare soldering areas for the ADC on the PCB with soldering fluid and solder the ADC MCP3424 onto the PCB.
