@@ -28,7 +28,7 @@ const uint8_t mode = 0;   // ADC: mode 0 == one-shot mode - 1 == continuos mode
 //  create an objcet of the class MCP342x
 MCP342x mcp342x = MCP342x();
 
-const uint8_t enable = 8;
+const uint8_t enable = 8;   // connected to ch0+ via a 10K resistor
 
 float span = 0.0;
 char str_buf[50] = "                            ";

@@ -106,7 +106,7 @@ The eagle files for the PCB are available in this repository and all parts are a
 
 ### Thermocouple (Granier-sap-flow sensor):
 
-* Connect one end to Ch+ and the other end the Ch-
+* Connect one end to Ch+ and the other end to Ch-
 
 * Set gain of ADC to “3”
 
@@ -132,5 +132,4 @@ The eagle files for the PCB are available in this repository and all parts are a
 
 * Sensirion ([Git](https://github.com/spease/Sensirion)) - library to interact with the SHT75 T/RH sensor
 
-## Troubleshooting
 

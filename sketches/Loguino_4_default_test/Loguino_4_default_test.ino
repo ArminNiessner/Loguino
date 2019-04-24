@@ -38,8 +38,7 @@ DS3231 RTC;
 File dataFile;
 unsigned long Filesize;
 
-const int chipSelect = 10;              // pin chipselect for SD-Card
-const int enable_adc = 14;              // pin to enable power supply to ADC
+const int chipSelect = 10;              // pin chipselect for SD-CardADC
 const int enable_rtc = 5;               // pin to enable power supply to RTC
 const int enable_temp = 6;              // pin to enable power supply to DS18S20
 const int enable_dd1 = 8;               // pin to enable power supply to Dendrometer #1
@@ -83,6 +82,8 @@ void setup() {
   pinMode(enable_rtc, OUTPUT);          // enable RTC
   digitalWrite(enable_rtc, HIGH);
   pinMode(wakePin, INPUT_PULLUP);
+  pinMode(enable_temp, OUTPUT);  
+  pinMode(enable_dd1, OUTPUT);
   Serial.begin(9600);
   delay(1000); // let serial console settle
   Wire.begin();
@@ -170,12 +171,8 @@ void measure() {
   dataFile = SD.open(filename.c_str(), FILE_WRITE);             // open file in write mode
     
   delay(50);
-
-  pinMode(enable_adc,OUTPUT);             // move to setup ?????
-  digitalWrite(enable_adc,HIGH);          // enable voltage supply to ADC
-  pinMode(enable_temp, OUTPUT);           // move to setup ?????
-  digitalWrite(enable_temp, HIGH);        // enable voltage supply to DS18S20
-  pinMode(enable_dd1, OUTPUT);            // move to setup ?????
+           
+  digitalWrite(enable_temp, HIGH);        // enable voltage supply to DS18S20           
   digitalWrite(enable_dd1, HIGH);         // enable voltage supply to Dendrometer #1
 
   delay(100);
@@ -227,7 +224,6 @@ void measure() {
   delay(100);
   
 
-  digitalWrite(enable_adc,LOW);           // disable voltage supply to ADC
   digitalWrite(enable_temp,LOW);          // disable voltage supply to ADC
   digitalWrite(enable_dd1, LOW);          // disable voltage supply to ADC
 
