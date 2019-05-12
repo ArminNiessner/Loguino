@@ -82,19 +82,19 @@ The eagle files for the PCB are available in this repository and all parts are a
 
 * Black (Brown) = GND (right)
 
-* Red (Green) = VCC (middle)
+* Red (Green) = VCC (middle, to Pin 6)
 
-* Yellow (White) = DATA (left)
+* Yellow (White) = DATA (left, to Pin 4)
 
 ### SHT7x Sensirion T/RH Sensor:
 
-* DATA
+* SCK (left, to Pin 7)
 
-* SCK
+* DATA (second from left, to Pin 9)
 
-* VCC
+* VCC (second from right, to Pin 6)
 
-* GND
+* GND (right)
 
 ### Dendrometer (linear displacement potentiometer, MMR10_11 R5K, Megatron Elektronik AG & Co, Munich, Germany):
 
