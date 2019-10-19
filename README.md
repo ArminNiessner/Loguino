@@ -1,3 +1,5 @@
+![Loguino](Loguino_logo.png "Loguino Open Source Hardware")
+
 # Loguino
 
 [![DOI](https://zenodo.org/badge/182802393.svg)](https://zenodo.org/badge/latestdoi/182802393)
