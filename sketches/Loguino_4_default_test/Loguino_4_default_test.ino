@@ -20,7 +20,7 @@
 
 #include <Wire.h>                       // lib for I2C (needed for ADC)
 #include <SPI.h>                        // lib for SPI (needed for SD-Card module
-#include <SD.h>                         // lib for SD-Card
+#include "SdFat.h"                      // lib for SD-Card
 #include <ANiess.h>               // needed for RTC
 #include <AN_RTClib.h>                     // lib for Real-Time-Clock
 #include <LowPower.h>                   // lib for sleep mode/low power mode
@@ -35,12 +35,17 @@ DallasTemperature sensors(&oneWire);
 AVRUtils avr;
 DS3231 RTC;
 
+SdFat SD;
+
+#define SD_CS_PIN SS
+
 File dataFile;
 unsigned long Filesize;
 
-const int chipSelect = 10;              // pin chipselect for SD-CardADC
+//const int chipSelect = 10;              // pin chipselect for SD-Card
+const int enable_adc = 14;              // pin to enable power supply to ADC
 const int enable_rtc = 5;               // pin to enable power supply to RTC
-const int enable_temp = 6;              // pin to enable power supply to DS18S20
+const int enable_temp = 7;              // pin to enable power supply to DS18S20
 const int enable_dd1 = 8;               // pin to enable power supply to Dendrometer #1
 //const int enable_dd2 = 9;             // pin to enable power supply to Dendrometer #2
 
@@ -60,7 +65,9 @@ const uint8_t mode = 0;                 // ADC: mode 0 == one-shot mode - 1 == c
 MCP342x mcp342x = MCP342x();            //  create an objcet of the class MCP342x
 
 int i_file = 0;                         // initial file appendix (a new file will be created for every 1MB file size)
-String filename;                        
+String app;
+String filename;   
+String file_ini = "Lg0001";                     
 float vdd1;                             // voltage dd1
 float dd1;                              // cm dd1
 char str_dd1[10] = "";
@@ -76,14 +83,25 @@ char str_xyl1[10] = "";
 
 float temp;
 
+void dateTime(uint16_t* date, uint16_t* time) {
+  DateTime now = RTC.now();
+
+  // return date using FAT_DATE macro to format fields
+  *date = FAT_DATE(now.year(), now.month(), now.day());
+
+  // return time using FAT_TIME macro to format fields
+  *time = FAT_TIME(now.hour()-2, now.minute(), now.second());
+}
+
 
 
 void setup() {
   pinMode(enable_rtc, OUTPUT);          // enable RTC
   digitalWrite(enable_rtc, HIGH);
+  pinMode(enable_adc,OUTPUT); 
+  pinMode(enable_temp, OUTPUT); 
+  pinMode(enable_dd1, OUTPUT); 
   pinMode(wakePin, INPUT_PULLUP);
-  pinMode(enable_temp, OUTPUT);  
-  pinMode(enable_dd1, OUTPUT);
   Serial.begin(9600);
   delay(1000); // let serial console settle
   Wire.begin();
@@ -114,7 +132,7 @@ void setup() {
   Serial.println(st_Minute);
 
   Serial.print("Initializing SD card...");    // see if the card is present and can be initialized:
-  if (!SD.begin(chipSelect)) {
+  if (!SD.begin(SD_CS_PIN)) {
     Serial.println("Card failed, or not present");
     // don't do anything more:
     return;
@@ -165,14 +183,13 @@ void loop() {
 void measure() {
   DateTime now = RTC.now();               
   delay(200);
-  SD.begin(chipSelect);                   // initiate comunication to SD-Card
-  
-  filename = String("Log0001" + String(i_file) + ".txt");       // filename: "Logger_name" + appendix
-  dataFile = SD.open(filename.c_str(), FILE_WRITE);             // open file in write mode
+  SD.begin(SD_CS_PIN);                   // initiate comunication to SD-Card
     
   delay(50);
-           
-  digitalWrite(enable_temp, HIGH);        // enable voltage supply to DS18S20           
+
+  
+  digitalWrite(enable_adc,HIGH);          // enable voltage supply to ADC
+  digitalWrite(enable_temp, HIGH);        // enable voltage supply to DS18S20
   digitalWrite(enable_dd1, HIGH);         // enable voltage supply to Dendrometer #1
 
   delay(100);
@@ -191,12 +208,12 @@ void measure() {
 
   // meassure Dendrometer #2
 //  mcp342x.setConf(addr, 1, 2, mode, rate, gain); //Measure total voltage (channel 2)
-//  delay(250);
+//  delay(300);
 //  vdd2 = mcp342x.getData(addr);
 //  delay(50);
 //
 //  mcp342x.setConf(addr, 1, 3, mode, rate, gain); //Measure partial voltage (channel 3)
-//  delay(250);
+//  delay(300);
 //  dd2 = mcp342x.getData(addr) / vdd2;
 //  dtostrf(dd2, 5, 4, str_dd2);
 //  delay(50);
@@ -206,7 +223,7 @@ void measure() {
   dtostrf(batV, 4, 3, str_batV);
 
   sensors.requestTemperatures();      // meassure temperature
-  delay(500);
+  delay(600);
   temp = sensors.getTempCByIndex(0);  // sensor at address 0
 
   mcp342x.setConf(addr, 1, 2, mode, rate, 3); //Measure voltage of channel 2 (e.g. for thermocouple)
@@ -216,7 +233,7 @@ void measure() {
   delay(50);
 
   //mcp342x.setConf(addr, 1, 3, mode, rate, 3); //Measure voltage of channel 3 (e.g. for thermocouple)
-  //delay(250);
+  //delay(300);
   //xyl2 = mcp342x.getData(addr) * 1000000 /40;   // convert µV in deltaT
   //dtostrf(xyl2, 5, 4, str_xyl2);
   //delay(50);
@@ -224,24 +241,33 @@ void measure() {
   delay(100);
   
 
+  digitalWrite(enable_adc,LOW);           // disable voltage supply to ADC
   digitalWrite(enable_temp,LOW);          // disable voltage supply to ADC
   digitalWrite(enable_dd1, LOW);          // disable voltage supply to ADC
 
-  Filesize = dataFile.size();             // get size of file
+  app = print2digitsstr(i_file);
+  filename = String(file_ini + app + ".txt");
 
-  // if file larger than 1MB, create new file
+  SdFile::dateTimeCallback(dateTime);
+  dataFile = SD.open(filename.c_str(), FILE_WRITE);             // open file in write mode
+  Filesize = dataFile.size();             // get size of file
+  
   if (Filesize > 1000000 && dataFile) {
+    dataFile.close();
     i_file += 1;
-    filename = String("Log0001" + String(i_file) + ".txt");
+    app = print2digitsstr(i_file);
+    filename = String(file_ini + app + ".txt");
+    SdFile::dateTimeCallback(dateTime);
     dataFile = SD.open(filename.c_str(), FILE_WRITE);
     Filesize = dataFile.size();
   }
-
+    
   if (Filesize == 0 && dataFile) {
     dataFile.println("Date,dd1,xyl1,temp,battV");         // if File is empty (new), create header (if appropiate add "dd2" or "xyl2")
   } else {
     
   }
+
 
   if (dataFile) {
     
@@ -330,4 +356,14 @@ void print2digits(int number) {
     Serial.write('0');
   }
   Serial.print(number, DEC);
+}
+
+String print2digitsstr(int number) {
+  String result;
+  if (number >= 0 && number < 10) {
+    result = "0" + String(number);
+  } else {
+    result = String(number);
+  }
+  return result;
 }
