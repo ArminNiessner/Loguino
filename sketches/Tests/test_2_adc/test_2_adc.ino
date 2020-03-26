@@ -1,6 +1,5 @@
-
 /*
- * Reads the value from an AD converter MCP342x and displays it in the serial monitor
+ * test sketch to check if the ADC MCP3424 is working properly
  * 
  * Copyright (C) 2019  Armin Niessner
  *
@@ -17,9 +16,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 #include <Wire.h>
 #include <MCP342x.h>
+#include <LowPower.h> 
 
 const byte addr = 4;      // ADC: I2C address - 0:68, 1:69, 2:6A, 3:6B, 4:6C, 5:6D, 6:6E, 7:6F
 const uint8_t gain = 0;   // ADC: gain factor 0-3: x1, x2, x4, x8
@@ -28,7 +28,7 @@ const uint8_t mode = 0;   // ADC: mode 0 == one-shot mode - 1 == continuos mode
 //  create an objcet of the class MCP342x
 MCP342x mcp342x = MCP342x();
 
-const uint8_t enable = 8;   // connected to ch0+ via a 10K resistor
+const uint8_t enable = 8;
 
 float span = 0.0;
 char str_buf[50] = "                            ";
@@ -41,15 +41,11 @@ void setup()
   Wire.beginTransmission(B00000000);
   Wire.write(B00000110);
   Wire.endTransmission();
-  Serial.println("fertig");
-  
+  Serial.println("ready");  
 }
-
-
 
 void loop()
 {
- 
   digitalWrite(enable, HIGH);
   for(uint8_t ch=0; ch<4;ch++){
     if(ch)
@@ -59,17 +55,18 @@ void loop()
       mcp342x.setConf(addr, 1, ch, mode, rate, gain);
       delay(300);
       span = mcp342x.getData(addr);
-  
       //  convert float to char[]
       dtostrf(span, 10, 6, str_buf);
   
       Serial.print(str_buf);
   }
   Serial.println();
-
   digitalWrite(enable, LOW); 
-
-   
-  //  do it every n milliseconds
   delay(2000);
+  sleepNow();
+}
+
+void sleepNow() {
+    delay(100);
+    LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF); // deep sleep  
 }

@@ -16395,6 +16395,8 @@ Grid 5.00 mm&lt;p&gt;
 <part name="R7" library="resistor" deviceset="R-EU_" device="0207/10" value="2.2K"/>
 <part name="R12" library="resistor" deviceset="R-EU_" device="0207/10" value="2.2K"/>
 <part name="R13" library="resistor" deviceset="R-EU_" device="0207/10" value="2.2K"/>
+<part name="ARDUINO_L1" library="con-lstb" deviceset="MA03-1" device=""/>
+<part name="ARDUINO_L2" library="con-lstb" deviceset="MA03-1" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -16433,7 +16435,7 @@ Grid 5.00 mm&lt;p&gt;
 <instance part="BMP280" gate="1" x="-17.78" y="50.8"/>
 <instance part="BAT" gate="-1" x="35.56" y="162.56"/>
 <instance part="BAT" gate="-2" x="35.56" y="157.48"/>
-<instance part="P+5" gate="VCC" x="53.34" y="162.56" rot="R270"/>
+<instance part="P+5" gate="VCC" x="68.58" y="162.56" rot="R270"/>
 <instance part="I2C" gate="-1" x="-96.52" y="20.32" rot="R180"/>
 <instance part="I2C" gate="-2" x="-96.52" y="22.86" rot="R180"/>
 <instance part="I2C" gate="-3" x="-96.52" y="25.4" rot="R180"/>
@@ -16480,6 +16482,8 @@ Grid 5.00 mm&lt;p&gt;
 <instance part="R7" gate="G$1" x="-66.04" y="111.76"/>
 <instance part="R12" gate="G$1" x="-66.04" y="106.68"/>
 <instance part="R13" gate="G$1" x="-66.04" y="101.6"/>
+<instance part="ARDUINO_L1" gate="G$1" x="45.72" y="180.34" rot="R270"/>
+<instance part="ARDUINO_L2" gate="G$1" x="63.5" y="180.34" rot="R270"/>
 </instances>
 <busses>
 </busses>
@@ -16534,11 +16538,6 @@ Grid 5.00 mm&lt;p&gt;
 <junction x="-114.3" y="121.92"/>
 </segment>
 <segment>
-<pinref part="BAT" gate="-1" pin="KL"/>
-<pinref part="P+5" gate="VCC" pin="VCC"/>
-<wire x1="40.64" y1="162.56" x2="50.8" y2="162.56" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <pinref part="I2C" gate="-3" pin="S"/>
 <wire x1="-93.98" y1="25.4" x2="-86.36" y2="25.4" width="0.1524" layer="91"/>
 <label x="-91.44" y="25.4" size="1.778" layer="95"/>
@@ -16586,6 +16585,17 @@ Grid 5.00 mm&lt;p&gt;
 <wire x1="-152.4" y1="91.44" x2="-152.4" y2="93.98" width="0.1524" layer="91"/>
 <pinref part="P+4" gate="VCC" pin="VCC"/>
 <wire x1="-152.4" y1="93.98" x2="-154.94" y2="93.98" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="P+5" gate="VCC" pin="VCC"/>
+<wire x1="60.96" y1="162.56" x2="66.04" y2="162.56" width="0.1524" layer="91"/>
+<pinref part="ARDUINO_L2" gate="G$1" pin="1"/>
+<wire x1="60.96" y1="162.56" x2="60.96" y2="172.72" width="0.1524" layer="91"/>
+<wire x1="60.96" y1="162.56" x2="48.26" y2="162.56" width="0.1524" layer="91"/>
+<wire x1="48.26" y1="162.56" x2="48.26" y2="167.64" width="0.1524" layer="91"/>
+<pinref part="ARDUINO_L1" gate="G$1" pin="1"/>
+<wire x1="48.26" y1="167.64" x2="43.18" y2="167.64" width="0.1524" layer="91"/>
+<wire x1="43.18" y1="167.64" x2="43.18" y2="172.72" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="GND" class="0">
@@ -17253,6 +17263,20 @@ Grid 5.00 mm&lt;p&gt;
 <pinref part="X4" gate="-1" pin="S"/>
 <wire x1="-101.6" y1="60.96" x2="-91.44" y2="60.96" width="0.1524" layer="91"/>
 <label x="-99.06" y="60.96" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="N$1" class="0">
+<segment>
+<pinref part="BAT" gate="-1" pin="KL"/>
+<wire x1="40.64" y1="162.56" x2="43.18" y2="162.56" width="0.1524" layer="91"/>
+<wire x1="43.18" y1="162.56" x2="43.18" y2="165.1" width="0.1524" layer="91"/>
+<pinref part="ARDUINO_L1" gate="G$1" pin="2"/>
+<wire x1="43.18" y1="165.1" x2="45.72" y2="165.1" width="0.1524" layer="91"/>
+<wire x1="45.72" y1="165.1" x2="45.72" y2="170.18" width="0.1524" layer="91"/>
+<wire x1="45.72" y1="172.72" x2="45.72" y2="170.18" width="0.1524" layer="91"/>
+<pinref part="ARDUINO_L2" gate="G$1" pin="2"/>
+<wire x1="45.72" y1="170.18" x2="63.5" y2="170.18" width="0.1524" layer="91"/>
+<wire x1="63.5" y1="170.18" x2="63.5" y2="172.72" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>

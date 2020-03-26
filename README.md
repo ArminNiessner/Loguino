@@ -4,9 +4,9 @@
 
 [![DOI](https://zenodo.org/badge/182802393.svg)](https://zenodo.org/badge/latestdoi/182802393)
 
-The Loguino is a low budget and open-source data acquisition device based on an Arduino Pro Mini and designed for monitoring e.g. tree growth dynamics, climate or other environmental parameter at remote locations. It is capable of reading analog inputs as voltage signals at a resolution of 18-bit and any kind of digital sensors can be connected using standard protocols as I²C, SPI, 1-Wire or SDI-12. Logging interval can be set from some seconds to hours and data are stored as comma seperated .csv file to a 4GB (or 8GB) micro sd-card. While the Loguino is in a low power sleep mode in between logs, consuming only about 200µA, a Real-Time-Clock Module (RTC DS3231) keeps track of time and wakens the Loguino for the next log event. Interrupts can independently be counted without interrupting main routines, in order to monitor rainfall or windspeed. The Loguino board togheter with a standard Lithium-Ion 18650 battery (keeps the Loguino running for about a year) is mounted within a rugged enclosure (IP65) that can be attached to a tree or pole, for instance.
+The Loguino is a low budget and open-source data acquisition device based on an Arduino Pro Mini and designed for monitoring e.g. tree growth dynamics, climate or other environmental parameter at remote locations. It is capable of reading analog inputs as voltage signals at a resolution of 18-bit and almost any kind of digital sensors can be connected using standard protocols (e.g. I²C, SPI, 1-Wire or SDI-12). Logging interval can be set from some seconds to hours and data are stored as comma seperated .csv file to a 4GB (or 8GB) micro sd-card. Therefore, no special software or hardware is needed to readout the Loguino. While the Loguino is in a low power sleep mode in between logs, consuming only about 100µA, a Real-Time-Clock Module (RTC DS3231) keeps track of time and wakens the Loguino for the next log event. Interrupts can independently be counted without interrupting main routines, in order to monitor rainfall or windspeed. The Loguino board togheter with a standard Lithium-Ion 18650 battery (keeps the Loguino running for about a year) is mounted within a rugged enclosure (IP65) that can be attached to a tree or pole, for instance.
 
-The eagle files for the PCB are available in this repository and all parts are available on the internet, however, ready-to-use (assembled, programmed and tested) Loguinos are for sale by sending a request to armin.niessner@taysira.org. All Arduino libraries and sketches needed for operation of the Loguino are available in this repository or at other git repositories (listed below). The Arduino software needed to program the Loguino is available at [Arduino](https://www.arduino.cc/).
+The eagle files for the PCB are available in this repository and all parts are easily available on the internet, however, ready-to-use (assembled, programmed and tested) Loguinos are for sale by sending a request to armin.niessner@taysira.org. All Arduino libraries and sketches needed for operation of the Loguino are available in this repository or at other git repositories (listed below). The Arduino software needed to program the Loguino is available at [Arduino](https://www.arduino.cc/).
 
 ## Parts
 
@@ -30,11 +30,11 @@ The eagle files for the PCB are available in this repository and all parts are a
 
 * Resistors (2 x 10 KOhm, 3 x 4.7 KOhm, 4 x 2.2 KOhm)
 
-* ceramic capacitors (1 x 100 nF, 4 x 3.3 nF)
+* Ceramic capacitors (1 x 100 nF, 4 x 3.3 nF)
 
 * Electrolytic capacitor (1 x 10µF)
 
-* Micro sd-card (4 GB or 8 GB)
+* Micro sd-card (4 GB or 8 GB, quality may differ significantly between different manufacturer and even production lines, leading to a higher power consumption during sleep mode. I use and recommend Transcend TS4GUSDC4 Micro SDHC 4GB Class 4)
 
 * Li-ion 18650 battery
 
@@ -46,37 +46,31 @@ The eagle files for the PCB are available in this repository and all parts are a
 
 * PCB (eagle files available in this repository or contact armin.niessner@taysira.org)
 
-![PCB](/PCB/Loguino_Mini.png)
+![PCB](/PCB/Loguino_v1.3.png)
 
 ## Assembly
 
-1. Clean PCB with alcohol, prepare soldering areas for the ADC on the PCB with soldering fluid and solder the ADC MCP3424 onto the PCB.
+1. Solder the Arduino Mini Pro Board on to the PCB using pins.
 
-1. Solder the Arduino Mini Pro Board on the PCB using pins.
+1. Remove the power LED and voltage regulator on the Arduino Pro Mini.
 
-1. Remove LED on Arduino Mini.
+1. Solder the socket strip next to the Arduino Pro Mini for connection to the FTDI. Test the Arduino by uploading the first test sketch ("test_1_arduino.ino") and check the serial monitor for the output.
 
-1. Solder a strip of 6 female pins next to the Arduino Mini for connection to FTDI.
+1. Prepare soldering areas for the ADC on the PCB with soldering fluid and solder the ADC MCP3424 onto the PCB.
 
-1. Solder two 4.7K Resistors, a 0.1µF ceramic capacitor and a 10µF ELKO next to the ADC.
+1. Solder the two 4.7K Resistors, the 0.1µF ceramic capacitor, the 10µF ELKO and two pins next to the ADC. Place a bridge on the two pins.
 
-1. Upload test script "Loguino_1_ADC_test.ino" (Address = 3 (6B)) and open serial monitor.
-
-1. Serial monitor should show random numbers for all four channels.
+1. Upload test script "test_2_adc.ino" and open serial monitor. The serial monitor should show random numbers for all four channels.
 
 1. Solder all screw terminals, resistors, capacitors and pins onto PCB.
 
-1. Repeat MCP test (6.).
+1. Repeat ADC test.
 
-1. Prepare SD-Card- and RTC-modules:
+1. Remove voltage regulator from the SD-card-module, connect lower two pins with a piece of wire and remove the overlapping part of the SD-module-PCB under the pins using a "Dremel".
 
-* Remove transistor from the SD-card-module, connect lower to pins with a bridge and remove overlapping part of SD-module-PCB under pins using a "Dremel".
+1. Solder the SD-module to the PCB and test it by uploading the test script "test_3_sd.ino". Check the serial monitor for error messages.
 
-* Remove LED and upper resistor-IC from RTC-module.
-
-1. Solder RTC-module to PCB and test by uploading test script "Loguino_2_RTC_test.ino".
-
-1. Solder SD-module to PCB and test by uploading test script "Loguino_3_Card_test.ino"
+1. Remove the LED and upper resistor-IC from the RTC-module and solder the RTC-module to the PCB. Test it by uploading the script "test_4_rtc.ino" and check the serial monitor.
 
 ## Sensors
 
