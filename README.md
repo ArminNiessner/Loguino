@@ -4,7 +4,7 @@
 
 [![DOI](https://zenodo.org/badge/182802393.svg)](https://zenodo.org/badge/latestdoi/182802393)
 
-The Loguino is a low budget and open-source data acquisition device based on an Arduino Pro Mini and designed for monitoring e.g. tree growth dynamics, climate or other environmental parameter at remote locations. It is capable of reading analog inputs as voltage signals at a resolution of 18-bit and almost any kind of digital sensors can be connected using standard protocols (e.g. I²C, SPI, 1-Wire or SDI-12). Logging interval can be set from some seconds to hours and data are stored as comma seperated .csv file to a 4GB (or 8GB) micro sd-card. Therefore, no special software or hardware is needed to readout the Loguino. While the Loguino is in a low power sleep mode in between logs, consuming only about 100µA, a Real-Time-Clock Module (RTC DS3231) keeps track of time and wakens the Loguino for the next log event. Interrupts can independently be counted without interrupting main routines, in order to monitor rainfall or windspeed. The Loguino board togheter with a standard Lithium-Ion 18650 battery (keeps the Loguino running for about a year) is mounted within a rugged enclosure (IP65) that can be attached to a tree or pole, for instance.
+The Loguino is a low budget and open-source data acquisition device based on an Arduino Pro Mini and designed for monitoring e.g. tree growth dynamics, climate or other environmental parameters at remote locations. It is capable of reading analog inputs as voltage signals at a resolution of 18-bit and almost any kind of digital sensors can be connected using standard protocols (e.g. I²C, SPI, 1-Wire or SDI-12). Logging interval can be set from some seconds to hours and data are stored as comma seperated .csv file to a 4GB (or 8GB) micro sd-card. Therefore, no special software or hardware is needed to readout the Loguino. While the Loguino is in a low power sleep mode in between logs, consuming only about 100µA, a Real-Time-Clock Module (RTC DS3231) keeps track of time and wakens the Loguino for the next log event. Interrupts can independently be counted without interrupting main routines, in order to monitor rainfall or windspeed. The Loguino board togheter with a standard Lithium-Ion 18650 battery (keeps the Loguino running for about a year) is mounted within a rugged enclosure (IP65) that can be attached to a tree or pole, for instance.
 
 The eagle files for the PCB are available in this repository and all parts are easily available on the internet, however, ready-to-use (assembled, programmed and tested) Loguinos are for sale by sending a request to armin.niessner@taysira.org. All Arduino libraries and sketches needed for operation of the Loguino are available in this repository or at other git repositories (listed below). The Arduino software needed to program the Loguino is available at [Arduino](https://www.arduino.cc/).
 
@@ -22,7 +22,7 @@ The eagle files for the PCB are available in this repository and all parts are e
 
 * Screw terminals (5 x 5.08 mm 2pins, 4 x 2.54 mm 4 pins, 1 x 2.54 mm 3 pins, 1 x 2.54 mm 2 pins)
 
-* Socket strip (6 pins, to connect FTDI)
+* Socket strip (6 pins, to connect the FTDI adapter)
 
 * Pin strip (51 pins in total to place the Arduino Pro Mini onto the PCB and for bridges)
 
@@ -74,39 +74,66 @@ The eagle files for the PCB are available in this repository and all parts are e
 
 ## Sensors
 
-### DS18S20 Temperature:
-
-* Black (Brown) = GND (right)
-
-* Red (Green) = VCC (middle, to Pin 6)
-
-* Yellow (White) = DATA (left, to Pin 4)
-
-### SHT7x Sensirion T/RH Sensor:
-
-* SCK (left, to Pin 7)
-
-* DATA (second from left, to Pin 9)
-
-* VCC (second from right, to Pin 6)
-
-* GND (right)
+![PCB](Loguino.png)
 
 ### Dendrometer (linear displacement potentiometer, MMR10_11 R5K, Megatron Elektronik AG & Co, Munich, Germany):
 
-* Green = Ch1+ (left)
+* Green = `ADC0 +` (left)
 
-* Yellow = Ch1- (middle)
+* Yellow = `ADC0 -` (middle)
 
-* Red = Ch2+ (right)
+* Red = `ADC1 +` (right)
 
-* Bridges at Ch1- and Ch2- have to be connected
+* Bridges at `ADC0 -` and `ADC1 -` have to be connected
+
+Example sketch: [Loguino_dd_dd](https://github.com/ArminNiessner/Loguino/tree/master/sketches/Examples/Loguino_dd_dd/Loguino_dd_dd.ino)
 
 ### Thermocouple (Granier-sap-flow sensor):
 
-* Connect one end to Ch+ and the other end to Ch-
+* Connect one end to `ADCx +` and the other end to `ADCx -`
 
-* Set gain of ADC to “3”
+* leave the bridge at `ADCx -` open
+
+Example sketch: [Loguino_4xyl](https://github.com/ArminNiessner/Loguino/tree/master/sketches/Examples/Loguino_4xyl/Loguino_4xyl.ino)
+
+### DS18S20 temperature:
+
+* GND = `-` (right)
+
+* VCC = `+` (middle, to Pin 6)
+
+* DATA = `D` (left, to Pin 4)
+
+Example sketch: [Loguino_dd_xyl_t](https://github.com/ArminNiessner/Loguino/tree/master/sketches/Examples/Loguino_dd_xyl_t/Loguino_dd_xyl_t.ino)
+
+### DHT22 T/RH sensor:
+
+* GND = `-` (right)
+* VCC = `+` (second from right)
+* Data = `D` (second from left, to pin 9)
+
+Example sketch: [Loguino_DHT](https://github.com/ArminNiessner/Loguino/tree/master/sketches/Examples/Loguino_DHT/Loguino_DHT.ino)
+
+### SHT7x Sensirion T/RH sensor:
+
+* SCK = `C` (left, to Pin 7
+
+* DATA = `D` (second from left, to Pin 9)
+
+* VCC = `+` (second from right, to Pin 6)
+
+* GND = `-` (right)
+
+Example sketch: [Loguino_SHT](https://github.com/ArminNiessner/Loguino/tree/master/sketches/Examples/Loguino_SHT/Loguino_SHT.ino)
+
+### BME280 T/RH/Pressure sensor:
+
+* VCC = `+` (top, to pin 5)
+* GND = `-` (second from top)
+* SCL = `SCL` (third from top)
+* SDA = `SDA` (third from bottom)
+
+Example sketch: [Loguino_BME](https://github.com/ArminNiessner/Loguino/tree/master/sketches/Examples/Loguino_BME/Loguino_BME.ino)
 
 ## Libraries
 
