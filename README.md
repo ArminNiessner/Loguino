@@ -141,13 +141,12 @@ Example sketch: [Loguino_BME](https://github.com/ArminNiessner/Loguino/tree/mast
 1. Download this repository and copy all the libraries from this repository to the "libraries"-folder in your Arduino installation folder.
 1. Get the libraries [AVRUtils](https://github.com/SConaway/AVRUtils), [LowPower](https://github.com/rocketscream/Low-Power) and [SdFat](https://github.com/greiman/SdFat)
 and copy them to the "libraries"-folder. If you want to use a DS18S20 temperature sensor or other digital sensors you have to get the corresponding library, listed below in the Libraries section.
-1. If you are using windows, you probably first need to download and install a driver for the FTDI Adapter
-(e.g. [here](https://www.campbellsci.com/downloads/usb-to-serial-driver-ftdi-chip-set)).
 1. Open one of the sketches from this repository with the Arduino software. Go to "Tools" and 
 set "Board" to "Arduino Pro or Pro Mini". Go again to "Tools" and set "Processor" to "ATmega 328P (3.3V, 8MHz)".
 1. Connect the FTDI Adapter to the Loguino board (upper side facing the Arduino Pro Mini, make sure
 that the jumper on the FTDI Adapter is set to 3.3V) and connect the usb to a usb port. Go to "Tools"
-and set "Port" to the appropiate port (e.g. COM3).
+and set "Port" to the appropiate port (e.g. COM3). If you are using windows, you probably first need to download and install a driver for the FTDI Adapter
+(e.g. [here](https://www.campbellsci.com/downloads/usb-to-serial-driver-ftdi-chip-set)).
 1. "Upload" the sketch (right arrow button) and wait until the sketch is compiled and uploaded.
 Open the "Serial Monitor" (button at the upper right corner) and check the output.
 
