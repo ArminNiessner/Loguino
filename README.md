@@ -8,7 +8,7 @@ The Loguino is a low budget and open-source data acquisition device based on an 
 
 The eagle files for the PCB are available in this repository and all parts are easily available on the internet, however, ready-to-use (assembled, programmed and tested) Loguinos are for sale by sending a request to armin.niessner@taysira.org. All Arduino libraries and sketches needed for operation of the Loguino are available in this repository or at other git repositories (listed below). The Arduino software needed to program the Loguino is available at [Arduino](https://www.arduino.cc/).
 
-## Parts
+# Parts
 
 * Arduino Pro Mini 3.3V, 8MHz, ATmega328 (e.g. [Amazon](https://www.amazon.de/gp/product/B078H9RMZY/ref=ppx_yo_dt_b_asin_title_o07_s01?ie=UTF8&psc=1))
 
@@ -48,7 +48,7 @@ The eagle files for the PCB are available in this repository and all parts are e
 
 ![PCB](/PCB/Loguino_v1.3.png)
 
-## Assembly
+# Assembly
 
 1. Solder the Arduino Mini Pro Board on to the PCB using pins.
 
@@ -72,7 +72,7 @@ The eagle files for the PCB are available in this repository and all parts are e
 
 1. Remove the LED and upper resistor-IC from the RTC-module and solder the RTC-module to the PCB. Test it by uploading the script "test_4_rtc.ino" and check the serial monitor.
 
-## Sensors
+# Sensors
 
 ![PCB](Loguino.png)
 
@@ -135,13 +135,47 @@ Example sketch: [Loguino_SHT](https://github.com/ArminNiessner/Loguino/tree/mast
 
 Example sketch: [Loguino_BME](https://github.com/ArminNiessner/Loguino/tree/master/sketches/Examples/Loguino_BME/Loguino_BME.ino)
 
+# Software set up and programming the Loguino
+
+1. Download and install the latest version of the [Arduino software](https://www.arduino.cc/en/Main/Software)
+1. Download this repository and copy all the libraries from this repository to the "libraries"-folder in your Arduino installation folder.
+1. Get the libraries [AVRUtils](https://github.com/SConaway/AVRUtils), [LowPower](https://github.com/rocketscream/Low-Power) and [SdFat](https://github.com/greiman/SdFat)
+and copy them to the "libraries"-folder. If you want to use a DS18S20 temperature sensor or other digital sensors you have to get the corresponding library, listed below in the Libraries section.
+1. If you are using windows, you probably first need to download and install a driver for the FTDI Adapter
+(e.g. [here](https://www.campbellsci.com/downloads/usb-to-serial-driver-ftdi-chip-set)).
+1. Open one of the sketches from this repository with the Arduino software. Go to "Tools" and 
+set "Board" to "Arduino Pro or Pro Mini". Go again to "Tools" and set "Processor" to "ATmega 328P (3.3V, 8MHz)".
+1. Connect the FTDI Adapter to the Loguino board (upper side facing the Arduino Pro Mini, make sure
+that the jumper on the FTDI Adapter is set to 3.3V) and connect the usb to a usb port. Go to "Tools"
+and set "Port" to the appropiate port (e.g. COM3).
+1. "Upload" the sketch (right arrow button) and wait until the sketch is compiled and uploaded.
+Open the "Serial Monitor" (button at the upper right corner) and check the output.
+
+## Setting the time
+1. Use the [test_4_rtc.ino](https://github.com/ArminNiessner/Loguino/tree/master/sketches/Tests/test_4_rtc/test_4_rtc.ino)
+to set the RTC to your system time.
+2. Upload the sketch, comment `RTC.adjust(DateTime(__DATE__, __TIME__));` and upload the sketch again. The second 
+upload with `//RTC.adjust(DateTime(__DATE__, __TIME__));` should be right after the first upload was finished, in order
+to have only a short delay between RTC time and system time (usually less than 10 seconds).
+
+## Final setup
+Choose an appropiate example sketch from this repository and adjust it to your sensor setup:
+
+* `uint8_t Log_Interval_Minutes = 1;` set to the desired logging intervall in minutes
+* `String file_ini = "Lg0001";` set to the appropiate Logger ID
+* If you want that logging starts at the next full minute, next full 10 minute (:00, :10, :20, ..),
+next full half hour (:00, :30) or the next full hour, you can uncomment the appropiate block of coder
+under `void setup() {....}` and uncomment the other blocks. 
+
+Upload the sketch and your Loguino is ready to go.
+
 ## Libraries
 
 * AVRUtils ([Git](https://github.com/SConaway/AVRUtils)) - measure supply voltage
 
 * SPI ([Arduino](https://www.arduino.cc/en/reference/SPI)) - communication with SD-card module
 
-* SD ([Arduino](https://www.arduino.cc/en/Reference/SD)) - read and write to SD-card
+* SdFat ([Git](https://github.com/greiman/SdFat)) - read and write to SD-card
 
 * Wire ([Arduino](https://www.arduino.cc/en/reference/wire)) - communication with I²C devices e.g. the MCP3424
 
