@@ -74,7 +74,7 @@ The eagle files for the PCB are available in this repository and all parts are e
 
 # Sensors
 
-![PCB](Loguino1.png)
+![PCB](Loguino2.png)
 
 ### Dendrometer (linear displacement potentiometer, MMR10_11 R5K, Megatron Elektronik AG & Co, Munich, Germany):
 
