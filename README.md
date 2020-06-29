@@ -24,9 +24,9 @@ The eagle files for the PCB are available in this repository and all parts are e
 
 * Socket strip (6 pins, to connect the FTDI adapter)
 
-* Pin strip (51 pins in total to place the Arduino Pro Mini onto the PCB and for bridges)
+* Pin strip (51 pins in total to place the Arduino Pro Mini onto the PCB and for placing the jumpers)
 
-* Bridges (maximum 5)
+* Jumper (maximum 5)
 
 * Resistors (2 x 10 KOhm, 3 x 4.7 KOhm, 4 x 2.2 KOhm)
 
@@ -84,15 +84,15 @@ The eagle files for the PCB are available in this repository and all parts are e
 
 * Red = `ADC1 +` (right)
 
-* Bridges at `ADC0 -` and `ADC1 -` have to be connected
+* Connect `ADC0 -` and `ADC1 -` to GND (place jumper as shown in the picture above) 
 
 Example sketch: [Loguino_dd_dd](https://github.com/ArminNiessner/Loguino/tree/master/sketches/Examples/Loguino_dd_dd/Loguino_dd_dd.ino)
 
 ### Thermocouple (Granier-sap-flow sensor):
 
-* Connect one end to `ADCx +` and the other end to `ADCx -`
+* Connect one end to e.g. `ADC0 +` and the other end to `ADC0 -`
 
-* leave the bridge at `ADCx -` open
+* leave the jumper at `ADC0 -` open
 
 Example sketch: [Loguino_4xyl](https://github.com/ArminNiessner/Loguino/tree/master/sketches/Examples/Loguino_4xyl/Loguino_4xyl.ino)
 
@@ -100,9 +100,9 @@ Example sketch: [Loguino_4xyl](https://github.com/ArminNiessner/Loguino/tree/mas
 
 * GND = `-` (right)
 
-* VCC = `+` (middle, to Pin 6)
+* VCC = `+` (middle)
 
-* DATA = `D` (left, to Pin 4)
+* DATA = `D` (left)
 
 Example sketch: [Loguino_dd_xyl_t](https://github.com/ArminNiessner/Loguino/tree/master/sketches/Examples/Loguino_dd_xyl_t/Loguino_dd_xyl_t.ino)
 
@@ -110,7 +110,7 @@ Example sketch: [Loguino_dd_xyl_t](https://github.com/ArminNiessner/Loguino/tree
 
 * GND = `-` (right)
 * VCC = `+` (second from right)
-* Data = `D` (second from left, to pin 9)
+* Data = `D` (second from left)
 
 Example sketch: [Loguino_DHT](https://github.com/ArminNiessner/Loguino/tree/master/sketches/Examples/Loguino_DHT/Loguino_DHT.ino)
 
@@ -118,9 +118,9 @@ Example sketch: [Loguino_DHT](https://github.com/ArminNiessner/Loguino/tree/mast
 
 * SCK = `C` (left, to Pin 7
 
-* DATA = `D` (second from left, to Pin 9)
+* DATA = `D` (second from left)
 
-* VCC = `+` (second from right, to Pin 6)
+* VCC = `+` (second from right)
 
 * GND = `-` (right)
 
@@ -128,7 +128,7 @@ Example sketch: [Loguino_SHT](https://github.com/ArminNiessner/Loguino/tree/mast
 
 ### BME280 T/RH/Pressure sensor:
 
-* VCC = `+` (top, to pin 5)
+* VCC = `+` (top)
 * GND = `-` (second from top)
 * SCL = `SCL` (third from top)
 * SDA = `SDA` (third from bottom)
@@ -138,13 +138,13 @@ Example sketch: [Loguino_BME](https://github.com/ArminNiessner/Loguino/tree/mast
 # Software set up and programming the Loguino
 
 1. Download and install the latest version of the [Arduino software](https://www.arduino.cc/en/Main/Software)
-1. Download this repository and copy all the libraries from this repository to the "libraries"-folder in your Arduino installation folder.
+1. Download this repository (click on the green "clone"-button at the top of this web page) and copy all the folders in "libraries" from this repository to the "libraries"-folder in your Arduino installation folder.
 1. Get the libraries [AVRUtils](https://github.com/SConaway/AVRUtils), [LowPower](https://github.com/rocketscream/Low-Power) and [SdFat](https://github.com/greiman/SdFat)
 and copy them to the "libraries"-folder. If you want to use a DS18S20 temperature sensor or other digital sensors you have to get the corresponding library, listed below in the Libraries section.
-1. Open one of the sketches from this repository with the Arduino software. Go to "Tools" and 
+1. Open one of the example scripts in the folder "sketches" from the Logiuno repository using the Arduino software. Go to "Tools" and 
 set "Board" to "Arduino Pro or Pro Mini". Go again to "Tools" and set "Processor" to "ATmega 328P (3.3V, 8MHz)".
-1. Connect the FTDI Adapter to the Loguino board (upper side facing the Arduino Pro Mini, make sure
-that the jumper on the FTDI Adapter is set to 3.3V) and connect the usb to a usb port. Go to "Tools"
+1. Connect the FTDI Adapter to the Loguino board, upper side facing the Arduino Pro Mini. Make sure
+that the jumper on the FTDI Adapter is set to 3.3V and the battery is not connected to the Loguino. Connect the usb to a usb port and go to "Tools"
 and set "Port" to the appropiate port (e.g. COM3). If you are using windows, you probably first need to download and install a driver for the FTDI Adapter
 (e.g. [here](https://www.campbellsci.com/downloads/usb-to-serial-driver-ftdi-chip-set)).
 1. "Upload" the sketch (right arrow button) and wait until the sketch is compiled and uploaded.
